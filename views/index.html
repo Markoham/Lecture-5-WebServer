@@ -6,8 +6,11 @@
     </head>
     <body>
         <h1>{{ title }}</h1>
-        <form>
-      
-      </form>
+        <form method="POST" >
+            <p>Name:<br /><input type="text" name="name" placeholder="Name" required /></p>
+            <p>Email:<br /><input type="email" name="email" placeholder="Email" required /></p>
+            <p>Feedback:<br /><textarea name="feedback" required></textarea></p>
+            <p><button type="submit">Send</button></p>
+        </form>
     </body>
 </html>
