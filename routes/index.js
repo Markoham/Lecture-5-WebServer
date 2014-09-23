@@ -1,13 +1,14 @@
 var express = require('express');
 var router = express.Router();
 var validator = require('validator');
+var mailer = require('../lib/mailer'),
 
 /* GET home page. */
 router.get('/', function(req, res) {
   res.render('index', { title: 'Express' });
 });
 
-router.post('/sendForm', function(req,res){
+router.on('validate/token', function(req, res, next) {
 
   var resObj = {
     message: '',
@@ -31,8 +32,20 @@ router.post('/sendForm', function(req,res){
   }
 
   if(resObj.success){
+    var mailOptions = {
+      to: resObj.email,
+      from: 'Lähettäjä <marko@onparas.com>',
+      subject: 	'Feedback from test site',
+      text: res.Obj.message
+    };
+    mailer.send(mailOptions, function(err) {
+      if (err) console.log(err);
+
+      return res.redirect('/');
+  	});
     resObj.message = "Feedback sent successfully";
     res.status(200).send(resObj);
+    next();
   }
   else{
     res.status(403).send(resObj);
