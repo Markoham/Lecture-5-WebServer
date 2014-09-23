@@ -35,7 +35,7 @@ router.post('/sendForm', function(req,res){
     res.status(200).send(resObj);
   }
   else{
-    res.status.(403).send(resObj);
+    res.status(403).send(resObj);
   }
 
 });
