@@ -8,8 +8,10 @@
   "dependencies": {
     "crema": "latest",
     "connect": "latest",
-    "haba": "latest",
+    "body-parser": "latest",
     "validator": "~3.19",
-    "connect-router": "0.0.2"
+    "connect-router": "0.0.2",
+    "nodemailer": "latest",
+    "serve-static": "latest"
   }
 }
