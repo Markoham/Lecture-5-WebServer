@@ -1,6 +1,7 @@
 var validator = require('validator');
 var mailer = require('../lib/mailer');
-mailer.config(require('../package.json'));
+var config = require('../package.json');
+mailer.config(config);
 
 module.exports = function(app)
 {
@@ -27,16 +28,8 @@ module.exports = function(app)
           }
           if (resObj.success) {
             var mailOptions = {
-              from: [
-                req.body.email,
-                req.body.email,
-                {name: req.body.name, address: req.body.email}
-                ],
-              to: [
-                'marko.hamppula@metropolia.fi',
-                'marko.hamppula@metropolia.fi',
-                {name: 'Marko', address: 'marko.hamppula@metropolia.fi'}
-                ],
+              from: req.body.name + ' <' + req.body.email + '>',
+              to: config.author,
               subject: 	'Feedback from test site',
               text: req.body.feedback
             };
