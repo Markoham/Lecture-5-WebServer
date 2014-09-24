@@ -1,45 +1,49 @@
 var validator = require('validator');
 var mailer = require('../lib/mailer');
+mailer.config(require('../package.json'));
 
 module.exports = function(app)
 {
     app.use('/sendFeedback', function(req, res){
-        if(req.method === "POST")
-        {
+        if (req.method === "POST") {
           console.log(req.body);
           var resObj = {
             message: '',
             success: true,
-            error: []
+            error: [],
+            mailError: {}
           }
-
-          if(!req.body.name){
+          if (!req.body.name) {
               resObj.error.push("Missing name");
               resObj.success = false;
           }
-          if(!req.body.email || !validator.isEmail(req.body.email)){
+          if (!req.body.email || !validator.isEmail(req.body.email)) {
             resObj.error.push("Missing or invalid email");
             resObj.success = false;
-
           }
-
-          if(!req.body.feedback){
+          if (!req.body.feedback) {
             resObj.error.push("Missing feedback");
             resObj.success = false;
           }
-
-          if(resObj.success){
+          if (resObj.success) {
             var mailOptions = {
-              to: "marko.hamppula@metropolia.fi",
-              from: req.body.name + ' <' + req.body.email + '>',
+              from: [
+                req.body.email,
+                req.body.email,
+                {name: req.body.name, address: req.body.email}
+                ],
+              to: [
+                'marko.hamppula@metropolia.fi',
+                'marko.hamppula@metropolia.fi',
+                {name: 'Marko', address: 'marko.hamppula@metropolia.fi'}
+                ],
               subject: 	'Feedback from test site',
               text: req.body.feedback
             };
             mailer.send(mailOptions, function(err) {
-                if (err)
-                {
+              if (err) {
                     resObj.success = false;
-                    resObj.error.email = err;
+                    resObj.mailError = err;
                     res.writeHead(403, {'Location': '/feedback'});
                     return res.end(JSON.stringify(resObj));
                 }
@@ -47,9 +51,9 @@ module.exports = function(app)
                 return res.end(JSON.stringify(resObj));
             });
             resObj.message = "Feedback sent successfully";
-            res.status(200).end(JSON.stringify(resObj));
+            res.end(JSON.stringify(resObj));
           }
-          else{
+          else {
             res.writeHead(403, {'Location': '/feedback'});
             res.end(JSON.stringify(resObj));
           }

@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "test": "jshint app.js routes/index.js lib/mailer.js",
     "start": "node ./bin/www"
   },
   "dependencies": {
@@ -12,6 +13,15 @@
     "validator": "~3.19",
     "connect-router": "0.0.2",
     "nodemailer": "latest",
-    "serve-static": "latest"
-  }
+    "nodemailer-sendmail-transport": "latest",
+    "serve-static": "latest",
+    "config": "^1.2"
+  },
+  "emailConfig": {
+    "service": "Gmail",
+    "auth": {
+      "user": "",
+       "pass": ""
+     }
+   }
 }
